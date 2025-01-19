@@ -1,0 +1,10 @@
+REWRITE ALL ROUTES INTO /public FOLDER
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteRule ^(.*)$ public/$1 [L]
+</IfModule>
+
+<FilesMatch "^\.">
+    Require all denied
+    Satisfy All
+</FilesMatch>
