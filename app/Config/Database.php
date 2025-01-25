@@ -25,28 +25,28 @@ class Database extends Config
      * @var array<string, mixed>
      */
     public array $default = [
-        'DSN'          => '',
-        'hostname'     => 'localhost',
-        'username'     => '',
-        'password'     => '',
-        'database'     => '',
-        'DBDriver'     => 'MySQLi',
-        'DBPrefix'     => '',
-        'pConnect'     => false,
-        'DBDebug'      => true,
-        'charset'      => 'utf8mb4',
-        'DBCollat'     => 'utf8mb4_general_ci',
-        'swapPre'      => '',
-        'encrypt'      => false,
-        'compress'     => false,
-        'strictOn'     => false,
-        'failover'     => [],
-        'port'         => 3306,
-        'numberNative' => false,
+        'DSN'          => '', // A Data Source Name string, used for custom or advanced database connection settings. Leave empty when using standard connection parameters like hostname, username, and password.
+        'hostname'     => 'localhost', // The server running MySQL.
+        'username'     => 'shopping_user', // MySQL user for your app.
+        'password'     => 'ShoppingPass', // Secure password for the user.
+        'database'     => 'shopping_cart', // Name of the database your app will use.
+        'DBDriver'     => 'MySQLi', // PHP's MySQL driver; faster than PDO for MySQL.
+        'DBPrefix'     => '', // Prefix for table names, optional.
+        'pConnect'     => false, // Persistent connection; false is usually better.
+        'DBDebug'      => true, // Enables error reporting for queries during development.
+        'charset'      => 'utf8mb4', // UTF-8 with full Unicode support (e.g., emojis).
+        'DBCollat'     => 'utf8mb4_general_ci', // Case-insensitive collation for strings.
+        'swapPre'      => '', // Optional prefix swapping for migrations.
+        'encrypt'      => false, // Enable if using encrypted connections.
+        'compress'     => false, // Enable if using compressed connections.
+        'strictOn'     => false, // Strict mode for SQL queries; usually off by default.
+        'failover'     => [], // Specify backup connection details.
+        'port'         => 3306, // MySQL default port.
+        'numberNative' => false, // Optional; leave as false for now.
         'dateFormat'   => [
-            'date'     => 'Y-m-d',
-            'datetime' => 'Y-m-d H:i:s',
-            'time'     => 'H:i:s',
+            'date'     => 'YYYY-mm-dd', // MySQL standard date format.
+            'datetime' => 'YYYY-mm-dd HH:ii:ss', // MySQL datetime format.
+            'time'     => 'HH:ii:ss', // MySQL time format.
         ],
     ];
 
