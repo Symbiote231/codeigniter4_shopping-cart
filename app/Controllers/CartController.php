@@ -2,25 +2,51 @@
 
 namespace App\Controllers;
 
+use App\Models\CartDao;
+use App\Services\CartServiceWrapper;
+
 class CartController extends BaseController
 {
+    private $cartDao;
+    private $myLogger;
+
+    public function __construct()
+    {
+        $this->myLogger = service('logger'); // Initialize logger here
+        $cartDao = new CartDao();
+        
+        if ($cartDao->isConnected()) {
+            $this->cartDao = $cartDao; // Use CartDao if the connection is successful
+            log_message('debug', 'Initialized CartDao DB layer correctly');
+            $this->myLogger->debug('Initialized CartDao DB layer correctly');
+        } else {
+            $this->cartDao = new CartServiceWrapper(); // If connection to DB failed fall back to default cart service
+            log_message('error', 'Fallback cart service activated due to DB connection failure.');
+            $this->myLogger->error('Fallback cart service activated due to DB connection failure.');
+        }
+    }
+
+    
     public function index()
     {
-        // Get the cart service
-        $cart = \Config\Services::cart();
         $data = [
             'title' => 'Shopping Cart',
-            'cart_contents' => $cart->contents(),
+            'cart_contents' => $this->cartDao->contents(),
+            'totalProducts' => $this->cartDao->totalProducts(),
+            'totalItems' => $this->cartDao->totalItems(),
+            'totalPrice' => $this->cartDao->totalPrice(), // Pass total price to the view
         ];
     
+        // Logging examples for complex variables:
+        // $this->myLogger->debug('Item data print_r: ' . print_r($data, true));
+        // $this->myLogger->debug('Item data json_encode: ' . json_encode($data));
+
         // Pass title and cart contents to the view
         return view('cart_view', $data);
     }
 
     public function add()
     {
-        $cart = \Config\Services::cart();
-
         // Add validation rules
         $validation = \Config\Services::validation();
         $validation->setRules([
@@ -33,7 +59,9 @@ class CartController extends BaseController
 
         // Check if required data exists
         if (!$this->validate($validation->getRules())) {
-            return redirect()->to('/cart/add')->withInput()->with('error', $validation->listErrors());
+            // return redirect()->to('/cart/add')->withInput()->with('error', $validation->listErrors()); Other way to pass the errors to the method
+            session()->setFlashdata('error', $validation->listErrors());
+            return redirect()->to('/cart/add')->withInput();
         }
 
         // Get form data
@@ -46,7 +74,7 @@ class CartController extends BaseController
         ];
 
         // Add the item to the cart
-        $cart->insert($productData);
+        $this->cartDao->addItem($productData);
 
         session()->setFlashdata('success', 'Item added to the cart successfully!');
         return redirect()->to('/cart');
@@ -54,8 +82,6 @@ class CartController extends BaseController
 
     public function update()
     {
-        $cart = \Config\Services::cart();
-
         // Get the rowid and qty from the request
         $rowid = $this->request->getPost('rowid');
         $qty = (int) $this->request->getPost('qty');
@@ -68,7 +94,7 @@ class CartController extends BaseController
 
         if ($rowid && $qty) {
             // Update cart item
-            $cart->update([
+            $this->cartDao->updateItem([
                 'rowid' => $rowid,
                 'qty'   => $qty,
             ]);
@@ -81,8 +107,7 @@ class CartController extends BaseController
 
     public function remove($rowid)
     {
-        $cart = \Config\Services::cart();
-        $cart->remove($rowid);
+        $this->cartDao->remove($rowid);
 
         session()->setFlashdata('success', 'Item removed from the cart!');
         return redirect()->to('/cart');
@@ -90,11 +115,20 @@ class CartController extends BaseController
 
     public function clear()
     {
-        $cart = \Config\Services::cart();
-        $cart->destroy();
+        $this->cartDao->destroy();
 
         session()->setFlashdata('success', 'Cart cleared!');
         return redirect()->to('/cart');
+    }
+
+    public function totalItems()
+    {
+        return $this->cartDao->totalItems();
+    }
+
+    public function totalPrice()
+    {
+        return $this->cartDao->totalPrice();
     }
 
     public function showAddForm()
