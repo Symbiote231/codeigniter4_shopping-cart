@@ -5,14 +5,14 @@ USE shopping_cart;
 
 -- Create the cart_items table with utf8mb4 charset
 CREATE TABLE IF NOT EXISTS cart_items (
-    rowid INT AUTO_INCREMENT PRIMARY KEY,
-    id VARCHAR(255) NOT NULL,
-    name VARCHAR(255) NOT NULL,
-    price DECIMAL(10, 2) NOT NULL,
-    qty INT NOT NULL,
-    options JSON DEFAULT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+    rowid INT AUTO_INCREMENT PRIMARY KEY, -- Database row identifier set as primary key
+    id VARCHAR(255) NOT NULL, -- Product ID (string, up to 255 characters)
+    name VARCHAR(255) NOT NULL, -- Product name
+    price DECIMAL(10, 2) NOT NULL, -- Product price with two decimal places
+    qty INT NOT NULL, -- Product quantity
+    options JSON DEFAULT NULL, -- JSON field for additional options
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, -- Creation timestamp
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP -- Last update timestamp
 ) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 
 -- Optional index creation
