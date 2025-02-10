@@ -14,7 +14,7 @@ class CartController extends BaseController
     {
         $this->myLogger = service('logger'); // Initialize logger here
         $cartDao = new CartDao();
-        
+
         if ($cartDao->isConnected()) {
             $this->cartDao = $cartDao; // Use CartDao if the connection is successful
             log_message('debug', 'Initialized CartDao DB layer correctly');
@@ -26,7 +26,7 @@ class CartController extends BaseController
         }
     }
 
-    
+
     public function index()
     {
         $data = [
@@ -36,7 +36,7 @@ class CartController extends BaseController
             'totalItems' => $this->cartDao->totalItems(),
             'totalPrice' => $this->cartDao->totalPrice(), // Pass total price to the view
         ];
-    
+
         // Logging examples for complex variables:
         // $this->myLogger->debug('Item data print_r: ' . print_r($data, true));
         // $this->myLogger->debug('Item data json_encode: ' . json_encode($data));
@@ -136,8 +136,8 @@ class CartController extends BaseController
         $data = [
             'title' => 'Add to Cart',
         ];
-    
+
         // Pass title to the view
-        return view('cart_add');
+        return view('cart_add', $data);
     }
 }
