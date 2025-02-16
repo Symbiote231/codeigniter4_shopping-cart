@@ -1,0 +1,57 @@
+# Docker Compose version
+version: '3.8'
+
+# Define services/containers
+services:
+  # Main application service
+  app:
+    # Build configuration
+    build:
+      context: .  # Use current directory as build context
+      dockerfile: Dockerfile
+    # Map host port 80 to container port 80
+    ports:
+      - "80:80"
+    # Mount project directory into container
+    volumes:
+      - .:/var/www/html
+    # Wait for database to be ready
+    depends_on:
+      - db
+    # Environment variables for CodeIgniter
+    environment:
+      - CI_ENVIRONMENT=development
+      - DB_HOST=db
+      - DB_USERNAME=root
+      - DB_PASSWORD=codeigniter
+      - DB_DATABASE=codeigniter
+    # Connect to custom network
+    networks:
+      - codeigniter-network
+
+  # Database service
+  db:
+    # Use MySQL 8.0.37
+    image: mysql:8.0.37
+    # Map MySQL port for external access
+    ports:
+      - "3306:3306"
+    # Database configuration
+    environment:
+      MYSQL_ROOT_PASSWORD: codeigniter
+      MYSQL_DATABASE: codeigniter
+    # Persist database data
+    volumes:
+      - mysql_data:/var/lib/mysql
+    # Connect to custom network
+    networks:
+      - codeigniter-network
+
+# Define custom network for service isolation
+networks:
+  codeigniter-network:
+    driver: bridge
+
+# Define named volumes for data persistence
+volumes:
+  mysql_data:
