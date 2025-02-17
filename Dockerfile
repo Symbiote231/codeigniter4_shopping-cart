@@ -35,9 +35,10 @@ COPY . /var/www/html/
 # - www-data is Apache's user
 # - 755 allows read/execute for everyone, write for owner
 # - writable directory needs 777 for CodeIgniter to write logs, cache, etc.
-RUN chown -R www-data:www-data /var/www/html \
-    && chmod -R 755 /var/www/html \
-    && chmod -R 777 /var/www/html/writable
+RUN chown -R www-data:www-data /var/www/html \    # Change owner to Apache user
+    && find /var/www/html -type f -exec chmod 644 {} \; \    # Files get 644
+    && find /var/www/html -type d -exec chmod 755 {} \; \    # Directories get 755
+    && chmod -R 777 /var/www/html/writable         # Writable directory gets full permissions
 
 # Create and enable Apache configuration for CodeIgniter
 # This ensures proper handling of .htaccess and directory access
