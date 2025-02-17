@@ -12,6 +12,8 @@ services:
     # Mount project directory into container
     volumes:
       - .:/var/www/html
+    # Set proper user and group
+    user: "1000:www-data"
     # Wait for database to be ready
     depends_on:
       - db
