@@ -1,0 +1,23 @@
+# Ignore version control files
+.git
+.gitignore
+
+# Ignore environment files
+.env
+
+# Ignore development files
+/writable/cache/*
+/writable/logs/*
+/writable/session/*
+/writable/uploads/*
+/writable/debugbar/*
+
+# Ignore vendor directory (will be installed in container)
+/vendor/
+
+# Ignore node modules if you use them
+/node_modules/
+
+# Ignore IDE files
+.idea/
+.vscode/
