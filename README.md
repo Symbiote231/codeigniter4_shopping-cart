@@ -1,5 +1,7 @@
 # CodeIgniter 4 Application Starter
 
+My first CodeIgniter4 v4.6.0 running on PHP v8.3, set up in Linux enviroment using Debian 11 Bullseye distro and using MySQL v8.0.37
+
 ## What is CodeIgniter?
 
 CodeIgniter is a PHP full-stack web framework that is light, fast, flexible and secure.
