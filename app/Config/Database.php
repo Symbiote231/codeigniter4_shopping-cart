@@ -197,5 +197,31 @@ class Database extends Config
         if (ENVIRONMENT === 'testing') {
             $this->defaultGroup = 'tests';
         }
+
+        $this->default = [
+            'DSN'          => '', // A Data Source Name string, used for custom or advanced database connection settings. Leave empty when using standard connection parameters like hostname, username, and password.
+            'hostname'     => $_ENV['DB_HOST'] ?? 'localhost', // The server running MySQL.
+            'username'     => $_ENV['DB_USERNAME'] ?? 'shopping_user', // MySQL user for your app.
+            'password'     => $_ENV['DB_PASSWORD'] ?? 'ShoppingPass', // Secure password for the user.
+            'database'     => $_ENV['DB_DATABASE'] ?? 'shopping_cart', // Name of the database your app will use.
+            'DBDriver'     => 'MySQLi', // PHP's MySQL driver; faster than PDO for MySQL.
+            'DBPrefix'     => '', // Prefix for table names, optional.
+            'pConnect'     => false, // Persistent connection; false is usually better.
+            'DBDebug'      => true, // Enables error reporting for queries during development.
+            'charset'      => 'utf8mb4', // UTF-8 with full Unicode support (e.g., emojis).
+            'DBCollat'     => 'utf8mb4_general_ci', // Case-insensitive collation for strings.
+            'swapPre'      => '', // Optional prefix swapping for migrations.
+            'encrypt'      => false, // Enable if using encrypted connections.
+            'compress'     => false, // Enable if using compressed connections.
+            'strictOn'     => false, // Strict mode for SQL queries; usually off by default.
+            'failover'     => [], // Specify backup connection details.
+            'port'         => $_ENV['DB_PORT'] ?? 3306, // MySQL default port.
+            'numberNative' => false, // Optional; leave as false for now.
+            'dateFormat'   => [
+            'date'     => 'YYYY-mm-dd', // MySQL standard date format.
+            'datetime' => 'YYYY-mm-dd HH:ii:ss', // MySQL datetime format.
+            'time'     => 'HH:ii:ss', // MySQL time format.
+            ],
+        ];
     }
 }
